@@ -14,7 +14,7 @@ It combines a **LangGraph interview workflow**, **LlamaIndex BM25 retrieval**, *
 
 - **Agentic interview workflow** powered by LangGraph
 - **RAG-grounded questioning** using LlamaIndex BM25 over a curated question bank
-- **Resume/JD-aware personalization** through optional candidate context
+- **Resume/JD-aware personalization** through required document upload
 - **Adaptive follow-ups** based on answer quality and previous turns
 - **Strict LLM-as-a-Judge evaluation** with score caps and fake-strength filtering
 - **Real-time browser interview experience** using FastAPI WebSockets
@@ -33,7 +33,7 @@ Landing Page
    -> Structured Feedback Report
 ```
 
-The candidate selects a role, seniority level, interview type, interviewer style, max questions, and optional resume context. The platform then runs a multi-turn interview and generates a structured report.
+The candidate selects a role, seniority level, interview type, interviewer style, max questions, and uploads both a resume and job description. The platform extracts the document text, runs a multi-turn interview, and generates a structured report.
 
 ---
 
@@ -57,7 +57,7 @@ The candidate selects a role, seniority level, interview type, interviewer style
 
 ```text
 Candidate Setup
-  role / level / style / interview type / resume context
+  role / level / style / interview type / resume upload / JD upload
         |
         v
 FastAPI WebSocket Server
@@ -88,7 +88,7 @@ LangGraph Interview Engine
 LAST ROUND uses a 4-node graph:
 
 1. **retrieve_context**  
-   Retrieves relevant snippets from the question bank and optional candidate context.
+   Retrieves relevant snippets from the question bank, uploaded resume, and uploaded job description.
 
 2. **interviewer**  
    Generates one focused question at a time and adapts follow-ups based on the candidate answer.
@@ -112,7 +112,7 @@ START -> retrieve_context -> interviewer -> human -> interviewer | grade -> END
 The current RAG implementation uses **sparse keyword retrieval**, not vector embeddings.
 
 ```text
-question_bank.json + resume text + JD text
+question_bank.json + extracted resume text + extracted JD text
         |
         v
 LlamaIndex TextNode / Document objects
@@ -128,10 +128,12 @@ BM25Retriever, top_k = 4
 Private context injected into interviewer prompt
 ```
 
-Current retrieval facts:
+Document ingestion and retrieval facts:
 
 - Question bank: `data/question_bank.json`
 - Curated prompts: **22**
+- Upload types: **PDF, TXT, MD**
+- PDF extraction: **client-side PDF.js**
 - Top-k retrieval: **4**
 - Resume/JD chunking: **256 tokens**, **20-token overlap**
 - Retrieval engine: **LlamaIndex BM25Retriever**
@@ -358,7 +360,7 @@ Use the real-provider tests carefully because they consume API quota.
 **LAST ROUND – Agentic RAG Interview Platform | FastAPI, LangGraph, Groq, LlamaIndex BM25, Pydantic, WebSockets**
 
 - Built a 4-node LangGraph interview engine handling retrieval, interviewer generation, candidate interruption, and grading across 7 roles, 3 seniority levels, and 3 interview modes.
-- Developed a BM25-based RAG layer with 256-token chunks, 20-token overlap, and top-4 retrieval over 22 curated interview prompts plus optional resume context and backend JD support.
+- Developed a BM25-based RAG layer with PDF/TXT/MD resume and JD ingestion, 256-token chunks, 20-token overlap, and top-4 retrieval over 22 curated interview prompts plus uploaded candidate/job context.
 - Implemented strict LLM evaluation with 1-5 score validation, structured criteria scoring, answer-quality classification, score caps, and fake-strength filtering.
 - Shipped a browser-based interview experience with 3 API surfaces, real-time WebSocket communication, TTS, speech input, and a 4-page frontend.
 
@@ -367,15 +369,13 @@ Use the real-provider tests carefully because they consume API quota.
 ## Current Limitations
 
 - Current retrieval is BM25-based, not FAISS/vector embedding-based.
-- PDF ingestion is not implemented yet.
-- JD text is supported in the backend config but not fully exposed in the current setup UI.
+- PDF extraction runs in the browser via PDF.js; there is no backend PDF parser yet.
 - Persistent database storage is not implemented; sessions use in-memory LangGraph checkpointing.
 
 ---
 
 ## Roadmap
 
-- PDF resume/JD upload and parsing
 - Dense vector retrieval with embeddings
 - Hybrid retrieval and reranking
 - Persistent interview history
@@ -390,4 +390,3 @@ Use the real-provider tests carefully because they consume API quota.
 Never commit `.env` or real API keys. The repository ignores `.env` by default.
 
 If an API key is leaked, rotate it immediately from the provider console.
-

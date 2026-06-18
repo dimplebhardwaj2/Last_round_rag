@@ -115,6 +115,7 @@ async def interview(ws: WebSocket) -> None:
             style=(c.get("style") or "Technical").strip(),
             interview_type=(c.get("interview_type") or "behavioral").strip(),
             resume_text=(c.get("resume_text") or "").strip(),
+            jd_text=(c.get("jd_text") or "").strip(),
             max_questions=int(c.get("max_questions") or 6),
         )
 

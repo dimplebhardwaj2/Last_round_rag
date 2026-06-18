@@ -1,7 +1,7 @@
 """Retrieval layer (LlamaIndex + BM25).
 
-Grounds the interviewer in (a) a curated question bank and (b) the candidate's
-resume / the target job description, so questions are personalized.
+Grounds the interviewer in (a) a curated question bank and (b) extracted resume
+and job-description text, so questions are personalized.
 
 We use BM25 keyword retrieval (pure Python, no model download, no torch) so it
 runs on any Python incl. 3.13 and on a free CPU HF Space. Swapping to vector
@@ -28,7 +28,7 @@ def load_question_bank() -> list[str]:
 
 
 def build_retriever(resume_text: str = "", jd_text: str = "") -> BM25Retriever:
-    """Build a BM25 retriever over the question bank + optional resume/JD."""
+    """Build a BM25 retriever over the question bank + uploaded resume/JD text."""
     nodes = [TextNode(text=q) for q in load_question_bank()]
     for label, body in (("CANDIDATE RESUME", resume_text), ("JOB DESCRIPTION", jd_text)):
         if body and body.strip():

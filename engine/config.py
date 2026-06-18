@@ -17,8 +17,8 @@ class InterviewConfig:
     style: str = "Technical"  # Friendly | Technical | Challenging
     interview_type: str = "behavioral"  # behavioral | coding | system_design
     max_questions: int = int(os.getenv("LR_MAX_QUESTIONS", "6"))
-    resume_text: str = ""  # optional: candidate resume for personalized questions
-    jd_text: str = ""      # optional: target job description
+    resume_text: str = ""  # extracted resume text for personalized questions
+    jd_text: str = ""      # extracted target job description text
     use_rag: bool = True   # ground questions in the bank + resume/JD via retrieval
 
 

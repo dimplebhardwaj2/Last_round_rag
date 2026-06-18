@@ -6,7 +6,7 @@
   <title>Set up your interview - Last Round</title>
   <link rel="stylesheet" href="/css/base.css" />
   <link rel="stylesheet" href="/css/components.css" />
-  <link rel="stylesheet" href="/css/setup.css" />
+  <link rel="stylesheet" href="/css/setup.css?v=20260618-doc-upload" />
 </head>
 <body>
   <header class="topbar">
@@ -45,12 +45,28 @@
         <div class="field"><span class="label">Interviewer style</span><div class="choices" id="styles"></div></div>
       </div>
 
-      <div class="step" data-step="3" data-sub="Add optional context, then launch your mock interview.">
+      <div class="step" data-step="3" data-sub="Upload your resume and job description so the interview can be personalized.">
         <div class="step-title"><span>04</span><h2>Final details</h2></div>
-        <label class="field">
-          <span class="label">Resume / background <span class="muted" style="text-transform:none;font-weight:500">- optional</span></span>
-          <textarea class="textarea" id="resume" placeholder="Paste a few lines about your experience, key projects, and the tech you use..."></textarea>
-        </label>
+        <div class="doc-grid">
+          <label class="upload-card" for="resumeFile">
+            <span class="upload-ic" data-icon="upload"></span>
+            <span class="upload-title">Upload resume</span>
+            <span class="upload-copy">PDF, TXT, or MD. Used to probe your actual projects and skills.</span>
+            <input id="resumeFile" type="file" accept=".pdf,.txt,.md,text/plain,application/pdf" />
+            <span class="upload-status" id="resumeStatus">Required</span>
+          </label>
+          <label class="upload-card" for="jdFile">
+            <span class="upload-ic" data-icon="clipboard"></span>
+            <span class="upload-title">Upload job description</span>
+            <span class="upload-copy">PDF, TXT, or MD. Used to match questions to the target role.</span>
+            <input id="jdFile" type="file" accept=".pdf,.txt,.md,text/plain,application/pdf" />
+            <span class="upload-status" id="jdStatus">Required</span>
+          </label>
+        </div>
+        <div class="doc-summary" id="docSummary">
+          <span data-icon="target"></span>
+          <span>Both documents are required for personalized RAG retrieval.</span>
+        </div>
         <div class="field"><div class="duration-head"><span class="label">Number of questions</span><span class="val" id="maxqVal">5</span></div><input type="range" id="maxq" min="3" max="10" step="1" value="5" /></div>
         <div class="field">
           <span class="label">Microphone check</span>
@@ -71,6 +87,6 @@
     </section>
   </main>
 
-  <script type="module" src="/js/setup.js"></script>
+  <script type="module" src="/js/setup.js?v=20260618-doc-upload"></script>
 </body>
 </html>
