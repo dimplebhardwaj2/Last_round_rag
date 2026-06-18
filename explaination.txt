@@ -1,0 +1,259 @@
+LAST ROUND - Project Explanation
+
+LAST ROUND is an AI-powered mock interview platform. It allows a candidate to choose a role, experience level, interview style, and interview type, then go through a realistic AI-led interview. The application asks interview questions, accepts the candidate's answers, continues the conversation across multiple turns, and finally generates a structured feedback report.
+
+The final report includes a verdict, an overall score, a short performance summary, per-criterion scores, strengths, areas for improvement, and a model answer showing how the candidate could have answered better.
+
+
+High-Level Overview
+
+I built this project as a full-stack AI interview simulator. The main goal was to create a realistic practice environment for candidates preparing for job interviews.
+
+The project has three main layers:
+
+1. Frontend
+2. Backend API
+3. AI interview engine
+
+The frontend gives the user an interview experience in the browser. The backend manages HTTP routes, WebSocket communication, text-to-speech, and static file serving. The AI engine handles the actual interview logic, including asking questions, tracking answers, using context, and generating final feedback.
+
+
+How The Application Works
+
+The user starts on the landing page and moves to the setup page. On the setup page, the user selects interview details such as:
+
+- Target role
+- Seniority level
+- Interview style
+- Interview type
+- Number of questions
+- Optional resume or job description context
+
+After setup, the user starts the live interview. The frontend opens a WebSocket connection to the FastAPI backend. The backend starts a LangGraph interview workflow and sends the first AI-generated question to the browser.
+
+For each answer:
+
+1. The frontend sends the candidate's answer to the backend.
+2. The backend resumes the LangGraph workflow.
+3. The AI engine decides whether to ask another question or finish the interview.
+4. If the interview continues, another question is sent back to the frontend.
+5. If the interview ends, the engine generates a structured feedback report.
+
+The report is then shown on the final report page.
+
+
+Frontend
+
+The frontend is built with HTML, CSS, and vanilla JavaScript. I chose a simple frontend stack because the application does not require a heavy framework. The UI is split into multiple pages:
+
+- index.html: landing page
+- setup.html: interview configuration page
+- interview.html: live interview session page
+- report.html: final feedback report page
+
+The frontend JavaScript is organized into modules for configuration, storage, UI helpers, voice handling, text-to-speech, WebSocket communication, interview flow, setup flow, and report rendering.
+
+The live interview page supports both typed and spoken answers. It uses browser speech features for a more natural interview experience. The interviewer questions can also be read aloud using text-to-speech.
+
+
+Backend
+
+The backend is built with FastAPI. FastAPI serves both the API and the frontend from a single Python server.
+
+The main backend file is server.py.
+
+Important backend routes include:
+
+- GET /api/health
+  Used to check whether the server is running.
+
+- POST /api/tts
+  Converts interviewer text into speech audio using edge-tts. If that fails, the browser can still fall back to built-in speech synthesis.
+
+- WebSocket /ws/interview
+  Handles the live interview conversation between the frontend and the AI engine.
+
+I used WebSockets because the interview is an interactive, multi-turn experience. A normal HTTP request-response flow would be less natural because the user and AI need to continuously exchange messages during the session.
+
+
+AI Interview Engine
+
+The AI interview engine is inside the engine folder. It is built using LangGraph, LangChain, Groq, LlamaIndex, and Pydantic.
+
+LangGraph is used to model the interview as a stateful graph. This is useful because an interview is not a single prompt. It is a sequence of steps where the system needs to remember previous questions, candidate answers, private notes, retrieved context, and the current question count.
+
+The graph flow is:
+
+START
+-> retrieve_context
+-> interviewer
+-> human
+-> route
+-> interviewer again or grade
+-> END
+
+The main graph nodes are:
+
+- retrieve_context
+  Retrieves relevant information from the question bank, resume text, or job description.
+
+- interviewer
+  Uses the LLM to generate the next interviewer question or follow-up.
+
+- human
+  Pauses the graph and waits for the candidate's answer.
+
+- route
+  Decides whether the interview should continue or move to grading.
+
+- grade
+  Sends the transcript to the LLM and asks it to produce a structured feedback report.
+
+
+LLM Integration
+
+The project uses Groq models through LangChain. The LLM is used in two major places:
+
+1. Interviewer generation
+   The model acts like an interviewer. It asks role-aware and level-aware questions, generates follow-ups, and adapts to the candidate's previous answers.
+
+2. Final grading
+   After the interview is complete, the model evaluates the transcript and creates a structured report.
+
+The selected model is controlled through environment variables. The project supports models such as:
+
+- llama-3.1-8b-instant
+- llama-3.3-70b-versatile
+
+This makes the system flexible because the model can be changed without modifying the main application code.
+
+
+RAG Implementation
+
+RAG stands for Retrieval-Augmented Generation. I used RAG to make the interview questions more grounded and relevant instead of relying only on generic LLM output.
+
+The project uses LlamaIndex with BM25 retrieval. The question bank is stored in:
+
+data/question_bank.json
+
+The retriever can pull relevant questions based on:
+
+- The selected role
+- The candidate's level
+- The interview type
+- Resume text
+- Job description text
+
+This retrieved context is passed privately to the interviewer prompt. The candidate does not see the context directly, but the AI uses it to ask better questions.
+
+
+Structured Feedback With Pydantic
+
+The final report is validated using Pydantic models. This is important because LLM output can sometimes be inconsistent. By defining a report schema, the application expects the final response to follow a clear structure.
+
+The report includes:
+
+- verdict
+- overall_score
+- summary
+- criteria
+- strengths
+- improvements
+- model_answer
+
+Each criterion has:
+
+- name
+- score
+- comment
+
+This structure makes it easier to render the report in the frontend and ensures that the output is useful to the candidate.
+
+
+Voice Features
+
+The project includes voice-related functionality to make the interview feel more realistic.
+
+The browser can use speech recognition so the candidate can answer using their microphone. The interviewer questions can be spoken aloud using browser text-to-speech or the backend edge-tts endpoint.
+
+This gives the app a more natural interview feel compared to a simple chatbot.
+
+
+Testing
+
+The project includes test files for both the engine and the server:
+
+- test_engine.py
+- test_server.py
+
+The engine tests cover interview scenarios such as normal completion, early ending, weak or empty answers, adaptive behavior, RAG retrieval, and resume-aware interviews.
+
+The server tests check the API and WebSocket behavior, including health checks, page serving, and full interview flow through the WebSocket protocol.
+
+
+Tech Stack
+
+Frontend:
+
+- HTML
+- CSS
+- Vanilla JavaScript
+- Browser Speech Recognition
+- Browser Speech Synthesis
+
+Backend:
+
+- Python
+- FastAPI
+- WebSockets
+- Uvicorn
+
+AI / LLM:
+
+- LangGraph
+- LangChain
+- Groq
+- Llama models through Groq
+
+RAG:
+
+- LlamaIndex
+- BM25 retriever
+- JSON question bank
+
+Data and Validation:
+
+- Pydantic
+- Python dataclasses
+- JSON
+
+Environment:
+
+- python-dotenv
+- requirements.txt
+- Python virtual environment
+
+Voice:
+
+- edge-tts
+- Browser text-to-speech
+- Browser speech recognition
+
+
+How I Would Explain This In An Interview
+
+I built LAST ROUND as a full-stack AI mock interview application. The frontend is a multi-page vanilla JavaScript app where users configure their interview, answer questions, and view a final feedback report. The backend is built with FastAPI and uses WebSockets for the live interview flow because the conversation requires real-time back-and-forth communication.
+
+The core AI logic is built using LangGraph. I modeled the interview as a stateful graph with nodes for retrieving context, generating interviewer questions, waiting for the user's answer, deciding whether to continue, and finally grading the transcript. This helped me manage multi-turn conversation state cleanly.
+
+For LLM integration, I used LangChain with Groq models. The model acts as the interviewer during the session and later acts as a grader to generate structured feedback. I used Pydantic to define and validate the shape of the final report.
+
+I also implemented RAG using LlamaIndex with BM25 retrieval. The system retrieves relevant interview questions from a local question bank and can personalize questions using resume or job description text. On the frontend, I added speech input and text-to-speech so the interview feels more natural.
+
+Overall, the stack is Python, FastAPI, LangGraph, LangChain, Groq, LlamaIndex, Pydantic, WebSockets, HTML, CSS, and vanilla JavaScript.
+
+
+Short Explanation
+
+LAST ROUND is a full-stack AI interview simulator. It helps users practice interviews by letting them configure a role and interview type, then conducting a live AI interview and generating structured feedback. I built the backend with FastAPI, the AI workflow with LangGraph and LangChain, the LLM layer with Groq, the RAG layer with LlamaIndex BM25, and the frontend with HTML, CSS, and vanilla JavaScript.
+

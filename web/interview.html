@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview in progress - Last Round</title>
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/interview.css" />
+  <!-- Live2D runtime (loads before the module; degrades to the orb if blocked) -->
+  <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.4.2/dist/pixi.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/RaSan147/pixi-live2d-display@v0.5.0-ls-8/dist/index.min.js"></script>
+</head>
+<body>
+  <!-- Gate: a user gesture here unlocks audio (browsers block autoplay otherwise) -->
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <div class="gate-icon"><span data-icon="mic"></span></div>
+      <h2>Ready for your interview?</h2>
+      <p>Your AI interviewer speaks out loud and listens to your answers. Turn your sound on and find a quiet spot.</p>
+      <button class="btn btn-primary btn-lg" id="gateBtn">Start interview <span data-icon="arrow-right"></span></button>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="/"><span class="logo"><span data-icon="sparkles"></span></span> Last Round</a>
+    <span class="badge live"><span class="pulse-dot"></span> Live interview</span>
+  </header>
+  <div class="room">
+    <div class="room-bar">
+      <div class="meta"><span class="badge" id="roleBadge">Interview</span></div>
+      <div class="meta"><span class="timer"><span data-icon="clock"></span><span class="mono" id="timer">00:00</span></span></div>
+    </div>
+    <div class="room-body">
+      <section class="stage">
+        <div class="stage-canvas">
+          <canvas id="live2dCanvas" class="live2d-canvas hidden"></canvas>
+          <div class="recruiter">
+            <div class="avatar-wrap" id="avatarWrap"><span class="aura a1"></span><span class="aura a2"></span><span class="aura a3"></span><div class="avatar" id="avatar"><span data-icon="user"></span></div></div>
+            <div class="r-name">Your AI Interviewer<span id="roleSub">Senior Recruiter</span></div>
+          </div>
+          <div class="stage-status"><span class="live-dot"></span> <span id="statusText">Connecting...</span></div>
+          <canvas id="waveCanvas" class="stage-wave hidden" width="360" height="44"></canvas>
+          <div class="question-overlay" id="qOverlay" style="display:none"><div class="q-label">Current question</div><div class="q-text" id="qText"></div></div>
+          <div class="selfview hidden" id="selfview"><video id="cam" autoplay muted playsinline></video><span class="tag">You</span></div>
+        </div>
+        <div class="dock">
+          <button class="ctrl" id="micBtn" title="Speak"><span data-icon="mic"></span></button>
+          <button class="ctrl" id="camBtn" title="Toggle camera"><span data-icon="video"></span></button>
+          <button class="ctrl active" id="spkBtn" title="Toggle voice"><span data-icon="volume-2"></span></button>
+          <div class="answer-wrap"><input id="answerInput" placeholder="Type your answer, or click the mic to speak..." autocomplete="off" /><button class="send" id="sendBtn" title="Send"><span data-icon="send"></span></button></div>
+          <button class="ctrl end" id="endBtn"><span data-icon="phone-off"></span> End</button>
+        </div>
+      </section>
+      <aside class="panel">
+        <div class="panel-sec"><div class="p-title">Progress <span id="progPct"></span></div><div class="prog-num"><span id="progNum">0</span><small> / <span id="progTotal">5</span> questions</small></div><div class="prog-bar"><span id="progBarFill"></span></div></div>
+        <div class="panel-sec"><div class="p-title">Assessment focus</div><div class="criteria-live" id="criteriaLive"></div></div>
+        <div class="panel-sec transcript-sec"><div class="p-title">Transcript</div><div class="transcript" id="transcript"></div></div>
+      </aside>
+    </div>
+  </div>
+  <script type="module" src="/js/interview.js?v=20260617-provider-errors"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# LAST ROUND — engine core (working brain, no UI)
+# Pinned for reproducibility. Free / open-source stack.
+
+langgraph==0.2.61
+langchain==0.3.14
+langchain-core==0.3.29
+langchain-groq==0.2.3
+pydantic==2.13.4
+python-dotenv==1.0.1
+
+# RAG (LlamaIndex + BM25 keyword retrieval — pure Python, runs on 3.13 + free CPU Space)
+llama-index-core==0.14.22
+llama-index-retrievers-bm25==0.7.1
+
+# API + WebSocket server (serves the frontend too — single container for HF Space)
+fastapi==0.135.1
+uvicorn[standard]==0.41.0
+
+# Free neural text-to-speech (no API key) — drives the Live2D avatar lip-sync
+edge-tts==7.2.7

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Last Round - Prepare for the round that changes everything</title>
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/landing.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="logo"><span data-icon="sparkles"></span></span> Last Round</a>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a class="btn btn-primary" href="/setup.html">Start interview</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero-shell">
+      <span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
+      <span class="spark spark-one">+</span><span class="spark spark-two">+</span><span class="spark spark-three">+</span>
+      <div class="hero rise">
+        <div class="hero-copy">
+          <span class="eyebrow"><span class="live-pin"></span> AI interviewer is ready</span>
+          <h1>Practice the interview.<br /><span>Own the room.</span></h1>
+          <p>Real questions, natural follow-ups, and clear feedback that turns every answer into a stronger one.</p>
+          <div class="cta">
+            <a class="btn hero-primary btn-lg" href="/setup.html">Start a mock interview <span data-icon="arrow-right"></span></a>
+            <a class="hero-link" href="#how"><span data-icon="play"></span> See how it works</a>
+          </div>
+          <div class="hero-proof">
+            <span><span data-icon="check-circle"></span> No sign-up</span>
+            <span><span data-icon="check-circle"></span> Personalized rounds</span>
+            <span><span data-icon="check-circle"></span> Instant report</span>
+          </div>
+        </div>
+        <div class="interview-preview rise-3" id="heroVisual">
+          <img class="hero-art" src="/assets/last-round-interview-hero.png" alt="3D illustration of an AI interview practice session with a laptop, microphone, analytics, and goal target" />
+          <div class="visual-badge visual-live"><i></i> Interview live <strong>18:24</strong></div>
+          <div class="visual-badge visual-score"><span data-icon="check-circle"></span><span><small>Readiness score</small><strong>84% - Strong hire</strong></span></div>
+          <div class="insight-card">
+            <span class="insight-icon"><span data-icon="trending-up"></span></span>
+            <span><small>Live coaching signal</small><strong>Great structure. Add the result.</strong></span><b>+12%</b>
+          </div>
+        </div>
+      </div>
+      <div class="hero-strip rise-4">
+        <article><span class="strip-icon blue"><span data-icon="mic"></span></span><div><strong>Adaptive questions</strong><small>Follow-ups shaped by your answers</small></div></article>
+        <article><span class="strip-icon pink"><span data-icon="zap"></span></span><div><strong>Live coaching</strong><small>Improve while the answer is fresh</small></div></article>
+        <article><span class="strip-icon violet"><span data-icon="bar-chart"></span></span><div><strong>Readiness report</strong><small>Know exactly what to sharpen</small></div></article>
+        <article><span class="strip-icon cyan"><span data-icon="target"></span></span><div><strong>Role-specific</strong><small>Practice for the job you want</small></div></article>
+      </div>
+    </section>
+
+    <section class="trust"><p>Practice for interviews at top companies</p><div class="logos"><span>Google</span><span>Microsoft</span><span>Amazon</span><span>OpenAI</span><span>Meta</span></div></section>
+    <section id="features" class="features-section">
+      <div class="section-head" style="padding-top:64px"><h2>Everything you need to be interview-ready</h2><p>A serious preparation platform - not a chatbot.</p></div>
+      <div class="features">
+        <div class="card feature"><div class="fic"><span data-icon="mic"></span></div><h3>Adaptive interviews</h3><p>Questions adjust to your role, seniority, and resume, with follow-ups that probe your real answers.</p></div>
+        <div class="card feature"><div class="fic"><span data-icon="zap"></span></div><h3>Real-time feedback</h3><p>A live transcript and an honest, structured assessment the moment your interview ends.</p></div>
+        <div class="card card-featured feature"><div class="fic"><span data-icon="bar-chart"></span></div><h3>Performance analytics</h3><p>Per-criterion scores and a readiness radar so you know exactly what to sharpen next.</p></div>
+        <div class="card feature"><div class="fic"><span data-icon="compass"></span></div><h3>Company-specific practice</h3><p>Behavioral, coding, and system-design rounds modeled on real interview formats.</p></div>
+        <div class="card feature"><div class="fic"><span data-icon="user"></span></div><h3>Resume-aware</h3><p>Paste your background and the interviewer tailors questions to your actual experience.</p></div>
+        <div class="card feature"><div class="fic"><span data-icon="target"></span></div><h3>Hiring readiness score</h3><p>A clear verdict and overall score that tracks how prepared you really are.</p></div>
+      </div>
+    </section>
+    <section id="how" class="section-head" style="padding-bottom:90px"><h2>Three steps to your best round</h2><p>Configure, interview, improve. Repeat until you're sharp.</p><div style="margin-top:30px"><a class="btn btn-signature btn-lg" href="/setup.html">Start your first interview <span data-icon="arrow-right"></span></a></div></section>
+  </main>
+  <script type="module">
+    import { hydrate } from "/js/icons.js";
+    hydrate();
+    const visual = document.querySelector("#heroVisual");
+    if (visual && matchMedia("(pointer:fine)").matches) {
+      visual.addEventListener("pointermove", (event) => {
+        const box = visual.getBoundingClientRect();
+        const x = (event.clientX - box.left) / box.width - .5;
+        const y = (event.clientY - box.top) / box.height - .5;
+        visual.style.setProperty("--rx", `${-3 + x * 7}deg`);
+        visual.style.setProperty("--ry", `${y * -7}deg`);
+        visual.style.setProperty("--near-x", `${x * -25}px`);
+        visual.style.setProperty("--near-y", `${y * -25}px`);
+        visual.style.setProperty("--far-x", `${x * 22}px`);
+        visual.style.setProperty("--far-y", `${y * 22}px`);
+      });
+      visual.addEventListener("pointerleave", () => {
+        visual.removeAttribute("style");
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set up your interview - Last Round</title>
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/setup.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="logo"><span data-icon="sparkles"></span></span> Last Round</a>
+    <a class="btn btn-ghost" href="/">Back</a>
+  </header>
+
+  <main class="container setup-wrap rise">
+    <div class="setup-head">
+      <span class="setup-kicker">Personalize your practice</span>
+      <h1>Set up your interview</h1>
+      <p class="sub" id="stepSub">Start with the role and level you want to practice for.</p>
+    </div>
+
+    <section class="setup-card card">
+      <div class="wizard-top">
+        <div class="steps-dots" id="stepDots"><span class="on"></span><span></span><span></span><span></span></div>
+        <div class="step-count"><span id="stepNow">1</span> / 4</div>
+      </div>
+
+      <div class="step active" data-step="0" data-sub="Start with the role and level you want to practice for.">
+        <div class="step-title"><span>01</span><h2>What are you aiming for?</h2></div>
+        <div class="row-2">
+          <label class="field"><span class="label">Target role</span><select class="select" id="role"></select></label>
+          <label class="field"><span class="label">Experience level</span><select class="select" id="level"></select></label>
+        </div>
+      </div>
+
+      <div class="step" data-step="1" data-sub="Choose the kind of round you want to rehearse.">
+        <div class="step-title"><span>02</span><h2>Pick the interview round</h2></div>
+        <div class="field"><span class="label">Interview type</span><div class="choices" id="types"></div></div>
+      </div>
+
+      <div class="step" data-step="2" data-sub="Choose how the interviewer should challenge you.">
+        <div class="step-title"><span>03</span><h2>Choose the interviewer style</h2></div>
+        <div class="field"><span class="label">Interviewer style</span><div class="choices" id="styles"></div></div>
+      </div>
+
+      <div class="step" data-step="3" data-sub="Add optional context, then launch your mock interview.">
+        <div class="step-title"><span>04</span><h2>Final details</h2></div>
+        <label class="field">
+          <span class="label">Resume / background <span class="muted" style="text-transform:none;font-weight:500">- optional</span></span>
+          <textarea class="textarea" id="resume" placeholder="Paste a few lines about your experience, key projects, and the tech you use..."></textarea>
+        </label>
+        <div class="field"><div class="duration-head"><span class="label">Number of questions</span><span class="val" id="maxqVal">5</span></div><input type="range" id="maxq" min="3" max="10" step="1" value="5" /></div>
+        <div class="field">
+          <span class="label">Microphone check</span>
+          <div class="mic-check">
+            <button class="btn btn-subtle" id="micTest" type="button"><span data-icon="mic"></span> Test mic</button>
+            <div class="mic-meter"><span id="micLevel"></span></div>
+            <span class="status" id="micStatus">Optional - you can also type your answers.</span>
+          </div>
+        </div>
+        <label class="switch voice-switch"><input type="checkbox" id="voice" checked /><span class="track"></span> Read questions aloud</label>
+      </div>
+
+      <div class="setup-foot">
+        <button class="btn btn-ghost" id="prevStep" type="button">Back</button>
+        <button class="btn btn-primary btn-lg" id="nextStep" type="button">Continue <span data-icon="arrow-right"></span></button>
+        <button class="btn btn-primary btn-lg hidden" id="begin" type="button">Begin interview <span data-icon="arrow-right"></span></button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/js/setup.js"></script>
+</body>
+</html>
